@@ -1,0 +1,17 @@
+name: Protect Branches
+
+on:
+  delete:
+    branches:
+      - 'master'
+      - 'main'
+
+jobs:
+  prevent_branch_deletion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch deletion
+        if: github.event.ref_type == 'branch' && github.event.ref == 'refs/heads/master' || github.event.ref == 'refs/heads/develop'
+        run: |
+          echo "Deleting master or develop branch is not allowed."
+          exit 1
